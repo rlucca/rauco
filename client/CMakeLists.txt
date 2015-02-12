@@ -33,6 +33,5 @@ add_definitions(
 			-Winline
 			-Wshadow
 			-Wcast-qual
-			-Wconversion
 			-Wpointer-arith
 		)
