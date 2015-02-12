@@ -7,6 +7,7 @@ project(netcaller)
 set (SOURCE
 	${PROJECT_SOURCE_DIR}/include/libnetcaller.h
 	${PROJECT_SOURCE_DIR}/src/libnetcaller.c
+	${PROJECT_SOURCE_DIR}/src/internal_handler.c
 	)
 
 set (INCLUDEDIRS
