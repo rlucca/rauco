@@ -4,6 +4,9 @@ project(rauco)
 
 set(SOURCE
 	${PROJECT_SOURCE_DIR}/include/rauco.h
+	${PROJECT_SOURCE_DIR}/src/rauco.c
+	${PROJECT_SOURCE_DIR}/src/rauco_internal.h
+	${PROJECT_SOURCE_DIR}/src/rauco_internal.c
 	)
 
 set(INCLUDEDIRS

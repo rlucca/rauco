@@ -1,6 +1,6 @@
 
 all: clean
-	@-mkdir -p build && cd build && cmake .. && make -q -j 2
+	@-mkdir -p build && cd build && cmake .. && make
 
 clean:
 	@-rm -rf build
