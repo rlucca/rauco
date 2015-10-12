@@ -38,6 +38,7 @@ macro(CREATE_TEST_EXECUTABLE PREFIX BIN PARENT)
 endmacro(CREATE_TEST_EXECUTABLE)
 
 set(UNIT_TEST_CASES
+		rauco_internal
 		rauco
 		)
 
@@ -48,6 +49,7 @@ foreach(TEST_CASE IN LISTS UNIT_TEST_CASES)
 endforeach(TEST_CASE)
 
 set(INT_TEST_CASES
+		rauco_internal
 		rauco
 		)
 
