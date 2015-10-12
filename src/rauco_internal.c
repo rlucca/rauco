@@ -43,7 +43,7 @@ int ih_add_fd(struct internal_handler *ih, int fd)
 	if (ih_get_fd(ih, fd, &n) != -1)
 	{
 		errno = EALREADY;
-		return 1;
+		return -1;
 	}
 
 	fds = realloc(ih->fds, sizeof(int) * (n + 1));
@@ -75,7 +75,7 @@ int ih_del_fd(struct internal_handler *ih, int fd)
 	if (idx == -1)
 	{
 		errno = ENOENT;
-		return 1;
+		return -1;
 	}
 
 	fds = realloc(ih->fds, sizeof(int) * (n - 1));
