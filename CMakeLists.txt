@@ -56,6 +56,9 @@ foreach(TEST_CASE IN LISTS INT_TEST_CASES)
 	set(PREVIOUS int_${TEST_CASE})
 endforeach(TEST_CASE)
 
+SET(CMAKE_BUILD_TYPE Debug)
+#SET(CMAKE_BUILD_TYPE Release)
+
 #force some usefull options
 add_definitions(
 			-W
