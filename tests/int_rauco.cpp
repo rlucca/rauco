@@ -1,3 +1,7 @@
+extern "C" {
+#include "rauco.h"
+}
+
 #include "gtest.h"
 #include "fff.h"
 
@@ -7,12 +11,20 @@ class EntryPointIntTests : public testing::Test
 {
 	public:
 		void SetUp() {
-			//FFF_FAKE_LIST(RESET_FAKE);
-			FFF_RESET_HISTORY();
 		}
 };
 
 
-TEST_F(EntryPointIntTests, nulled_parameter)
+TEST_F(EntryPointIntTests, create_invalid_parameter_return_null)
 {
+	ASSERT_EQ(NULL, netcaller_create(NULL));
+}
+
+TEST_F(EntryPointIntTests, create_and_destroy)
+{
+	netcaller_setup_t h;
+	void *ret;
+	ret = netcaller_create(&h);
+	ASSERT_NE((void *) NULL, ret);
+	netcaller_destroy(ret);
 }

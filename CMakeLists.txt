@@ -29,6 +29,7 @@ enable_testing()
 macro(CREATE_TEST_EXECUTABLE PREFIX BIN PARENT)
 	set(TEST_SOURCE
 			${PROJECT_SOURCE_DIR}/tests/${PREFIX}_${BIN}.cpp
+			${PROJECT_SOURCE_DIR}/src/${BIN}.c
 		)
 	add_executable(${PREFIX}_${BIN}	${TEST_SOURCE})
 	target_link_libraries(${PREFIX}_${BIN} gtest ${PROJECT_NAME})

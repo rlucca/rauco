@@ -3,9 +3,12 @@
 
 void *netcaller_create(const netcaller_setup_t *setup)
 {
-	struct internal_handler *ih = malloc(sizeof(struct internal_handler));
+	struct internal_handler *ih;
 
-	if (ih == NULL)
+	if (setup == NULL)
+		return NULL;
+
+	if ((ih = malloc(sizeof(struct internal_handler))) == NULL)
 		return NULL;
 
 	ih->fds = malloc(sizeof(int));
@@ -56,4 +59,5 @@ void netcaller_destroy(void *h)
 	ih->checksum = 0xDEAD;
 	free(ih->buffer); ih->buffer = NULL;
 	free(ih->fds); ih->fds = NULL;
+	free(ih);
 }

@@ -4,6 +4,8 @@
 */
 #pragma once
 
+#include <stdio.h>
+
 /**
 	\brief Buffer data. This data is freed after the `handler' function.
 */
