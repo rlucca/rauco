@@ -29,13 +29,21 @@ void *netcaller_create(const netcaller_setup_t *setup)
 	return ih;
 }
 
-#if 0
 int netcaller_register(void *h, int fd)
 {
-	//errno = ESRCH;
-	return -1;
+	struct internal_handler *ih = h;
+	errno = 0;
+
+	if (ih_checksum_valid(ih) || fd < 0)
+	{
+		errno = EINVAL;
+		return -1;
+	}
+
+	return (!ih_add_fd(ih, fd)) ? 0 : -1;
 }
 
+#if 0
 int netcaller_deregister(void *h, int fd)
 {
 	//errno = ESRCH;

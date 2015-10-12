@@ -28,3 +28,13 @@ TEST_F(EntryPointIntTests, create_and_destroy)
 	ASSERT_NE((void *) NULL, ret);
 	netcaller_destroy(ret);
 }
+
+TEST_F(EntryPointIntTests, create_and_destroy_with_one_element)
+{
+	netcaller_setup_t h;
+	void *ret;
+	ret = netcaller_create(&h);
+	ASSERT_NE((void *) NULL, ret);
+	netcaller_register(ret, 4);
+	netcaller_destroy(ret);
+}
