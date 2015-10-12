@@ -15,15 +15,18 @@ FAKE_VOID_FUNC(free, void *);
 FAKE_VALUE_FUNC(unsigned int, ih_calculate_checksum, struct internal_handler *);
 FAKE_VALUE_FUNC(int, ih_checksum_valid, struct internal_handler *);
 FAKE_VALUE_FUNC(int, ih_add_fd, struct internal_handler *, int);
+FAKE_VALUE_FUNC(int, ih_del_fd, struct internal_handler *, int);
 
 
 
 #define FFF_FAKE_LIST(FAKE)					\
 			FAKE(malloc)					\
+			FAKE(realloc)					\
 			FAKE(free)						\
 			FAKE(ih_calculate_checksum)		\
 			FAKE(ih_checksum_valid)			\
-			FAKE(ih_add_fd)
+			FAKE(ih_add_fd)					\
+			FAKE(ih_del_fd)
 
 class EntryPointUnitTests : public testing::Test
 {
@@ -43,6 +46,12 @@ static int helper_ih_add_fd_fake_already(struct internal_handler *, int)
 static int helper_ih_add_fd_fake_nomem(struct internal_handler *, int)
 {
 	errno = ENOMEM;
+	return -1;
+}
+
+static int helper_ih_del_fd_fake_noent(struct internal_handler *, int)
+{
+	errno = ENOENT;
 	return -1;
 }
 
@@ -154,4 +163,30 @@ TEST_F(EntryPointUnitTests, register_ok_second_time)
 	ih_add_fd_fake.custom_fake = helper_ih_add_fd_fake_nomem;
 	ASSERT_EQ(-1, netcaller_register(NULL, 1));
 	ASSERT_EQ(ENOMEM, errno);
+}
+
+TEST_F(EntryPointUnitTests, deregister_invalid_first_parm)
+{
+	ih_checksum_valid_fake.return_val = 1;
+	ASSERT_EQ(-1, netcaller_deregister(NULL, 0));
+	ASSERT_EQ(EINVAL, errno);
+}
+
+TEST_F(EntryPointUnitTests, deregister_invalid_second_parm)
+{
+	ASSERT_EQ(-1, netcaller_deregister(NULL, -1));
+	ASSERT_EQ(EINVAL, errno);
+}
+
+TEST_F(EntryPointUnitTests, deregister_empty)
+{
+	ih_del_fd_fake.custom_fake = helper_ih_del_fd_fake_noent;
+	ASSERT_EQ(-1, netcaller_deregister(NULL, 1));
+	ASSERT_EQ(ENOENT, errno);
+}
+
+TEST_F(EntryPointUnitTests, deregister_ok)
+{
+	ASSERT_EQ(0, netcaller_deregister(NULL, 1));
+	ASSERT_EQ(0, errno);
 }

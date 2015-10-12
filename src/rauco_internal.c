@@ -1,4 +1,5 @@
 #include "rauco_internal.h"
+#include <string.h>
 
 unsigned int ih_calculate_checksum(struct internal_handler *ih)
 {
@@ -18,16 +19,20 @@ int ih_checksum_valid(struct internal_handler *ih)
 static int ih_get_fd(struct internal_handler *ih, int fd, unsigned *n)
 {
 	int *fds;
+	int ret = -1;
 
 	*n = 0;
 	for (fds = ih->fds; *fds != -1; fds++, (*n)++)
 	{
 		if (*fds == fd)
-			return fd;
+		{
+			// not break here, I need the N to be the array size
+			ret = *n;
+		}
 	}
 
 	(*n)++;
-	return -1;
+	return ret;
 }
 
 int ih_add_fd(struct internal_handler *ih, int fd)
@@ -52,6 +57,40 @@ int ih_add_fd(struct internal_handler *ih, int fd)
 
 		fds[n - 1] = fd;
 		fds[n] = -1;
+		return 0;
+	}
+
+	errno = ENOMEM;
+	return -1;
+}
+
+int ih_del_fd(struct internal_handler *ih, int fd)
+{
+	unsigned n;
+	int idx;
+	int *fds;
+
+	idx = ih_get_fd(ih, fd, &n);
+
+	if (idx == -1)
+	{
+		errno = ENOENT;
+		return 1;
+	}
+
+	fds = realloc(ih->fds, sizeof(int) * (n - 1));
+	if (fds)
+	{
+		if (fds != ih->fds)
+		{
+			ih->fds = fds;
+			ih->checksum = ih_calculate_checksum(ih);
+		}
+
+		// In theory, the last element copied is a -1.
+		// So, we don't need re-set it.
+		memcpy(ih->fds + idx, ih->fds + idx + 1,
+				sizeof(int) * (n - idx - 1));
 		return 0;
 	}
 

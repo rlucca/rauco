@@ -39,3 +39,12 @@ int ih_checksum_valid(struct internal_handler *ih);
 	\return 0, success. 1, error.
 */
 int ih_add_fd(struct internal_handler *ih, int fd);
+
+/**
+	\brief Remove `fd' from `fds' and replace the last element with value '-1'.
+
+	\param [in] ih, internal handler reference
+	\param [in] fd, file descriptor/socket
+	\return 0, success. 1, error.
+*/
+int ih_del_fd(struct internal_handler *ih, int fd);
