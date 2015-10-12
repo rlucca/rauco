@@ -10,7 +10,7 @@
 struct internal_handler {
 	const netcaller_setup_t *setup;
 	int *fds; // last is -1
-	unsigned int checksum; // setup ^ fds ^ buffer_size ^ ih
+	unsigned int checksum;
 	size_t buffer_size;
 	char *buffer;
 };
